@@ -31,8 +31,10 @@ function processHumanCoordinate(input) {
     console.log(`'processHumanCoordinate('${input}')`);
     if (gameTurn % 2 === 0) {
         currentPlayer = 'diamond';
+        displayMessage("Player O's turn")
     } else {
         currentPlayer = 'pets';
+        displayMessage("Player X's turn")
     }
 
     let coordinates = extractCoordinates(input);
@@ -74,11 +76,34 @@ function resetGame() {
 
 // this function should change from A1..C3 to coordinates
 // that are present in the `board` global variable
+
 function extractCoordinates(input) {
     // this is a sample of what should be returned if the
     // the user had typed `A1`
     // you need to add the to also treat other cases (A2..C3)
-    return { x: 0, y: 0};
+    let coordX
+    let coordY
+    let availableMoves = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3", "a1", "a2", "a3", "b1", "b2", "b3", "c1", "c2", "c3"]
+    let positionsTaken = []
+    positionsTaken.push(input)
+    if(availableMoves.includes(input)){
+        if(input.charAt(0) === "A" || input.charAt(0) === "a") {
+            coordX = 0
+        }
+        if(input.charAt(0) === "B" || input.charAt(0) === "b") {
+            coordX = 1
+        }
+        if(input.charAt(0) === "C" || input.charAt(0) === "c") {
+            coordX = 2
+        }
+        coordY = Number(input.charAt(1)) - 1
+        if(positionsTaken.includes(input)) {
+            displayMessage(`Position is already taken on board`)
+        }
+        return { x: coordX, y: coordY }
+    } else {
+        displayMessage(`Invalid coordinate entered`)
+    }    
 }
 
 // this function should return `X` or `O` or undefined (carefull it's not a string )
