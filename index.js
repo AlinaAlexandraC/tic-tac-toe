@@ -14,6 +14,10 @@ function setGameMode(selectedValue) {
             isPlayerXHuman = true;
             isPlayerYHuman = false;
             break;
+        case 'ai-ai':
+            isPlayerXHuman = false;
+            isPlayerYHuman = false;
+            break;
     }
     resetBoard();
 
@@ -38,7 +42,15 @@ function processHumanCoordinate(input) {
     }
 
     let coordinates = extractCoordinates(input);
-    board[coordinates.x][coordinates.y] = currentPlayer;
+    console.log(coordinates);
+    
+
+    //position is already taken on the board
+    if (board[coordinates.x][coordinates.y] === "") {
+        board[coordinates.x][coordinates.y] = currentPlayer;
+    }else {
+        displayMessage(`Position is already taken on board`);
+    }
 
     const winningPlayer = getWinningPlayer(board);
     if (winningPlayer) {
@@ -83,27 +95,23 @@ function extractCoordinates(input) {
     // you need to add the to also treat other cases (A2..C3)
     let coordX
     let coordY
-    let availableMoves = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3", "a1", "a2", "a3", "b1", "b2", "b3", "c1", "c2", "c3"]
-    let positionsTaken = []
-    positionsTaken.push(input)
-    if(availableMoves.includes(input)){
-        if(input.charAt(0) === "A" || input.charAt(0) === "a") {
-            coordX = 0
-        }
-        if(input.charAt(0) === "B" || input.charAt(0) === "b") {
-            coordX = 1
-        }
-        if(input.charAt(0) === "C" || input.charAt(0) === "c") {
-            coordX = 2
-        }
+    
+    if(input.charAt(0) === "A" || input.charAt(0) === "a") {
+        coordX = 0
+    }
+    if(input.charAt(0) === "B" || input.charAt(0) === "b") {
+        coordX = 1
+    }
+    if(input.charAt(0) === "C" || input.charAt(0) === "c") {
+        coordX = 2
+    }
+    if (0 < Number(input.charAt(1)) <= 3) {
         coordY = Number(input.charAt(1)) - 1
-        if(positionsTaken.includes(input)) {
-            displayMessage(`Position is already taken on board`)
-        }
-        return { x: coordX, y: coordY }
-    } else {
+    }else {
         displayMessage(`Invalid coordinate entered`)
-    }    
+    }
+    return { x: coordX, y: coordY }
+    
 }
 
 // this function should return `X` or `O` or undefined (carefull it's not a string )
