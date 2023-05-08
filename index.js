@@ -68,6 +68,8 @@ function processAICoordinate() {
 // the button labeled `Restart Game`
 function resetGame() {
     console.log(`resetGame()`);
+    setHTMLvisibilityForInputGameMode(true);
+    setHTMLvisibilityForButtonLabeledReset(false);
 }
 
 // this function should change from A1..C3 to coordinates
