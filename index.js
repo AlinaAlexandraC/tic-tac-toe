@@ -48,7 +48,7 @@ function processHumanCoordinate(input) {
     //position is already taken on the board
     if (board[coordinates.x][coordinates.y] === "") {
         board[coordinates.x][coordinates.y] = currentPlayer;
-    }else {
+    } else {
         displayMessage(`Position is already taken on board`);
     }
 
@@ -83,7 +83,7 @@ function processAICoordinate() {
 function resetGame() {
     console.log(`resetGame()`);
     setHTMLvisibilityForInputGameMode(true);
-    setHTMLvisibilityForButtonLabeledReset(false);
+    setHTMLvisibilityForButtonLabeledReset(true);
 }
 
 // this function should change from A1..C3 to coordinates
@@ -96,22 +96,26 @@ function extractCoordinates(input) {
     let coordX
     let coordY
     
-    if(input.charAt(0) === "A" || input.charAt(0) === "a") {
+    if (input.charAt(0) === "A" || input.charAt(0) === "a") {
         coordX = 0
     }
-    if(input.charAt(0) === "B" || input.charAt(0) === "b") {
+    if (input.charAt(0) === "B" || input.charAt(0) === "b") {
         coordX = 1
     }
-    if(input.charAt(0) === "C" || input.charAt(0) === "c") {
+    if (input.charAt(0) === "C" || input.charAt(0) === "c") {
         coordX = 2
     }
     if (0 < Number(input.charAt(1)) <= 3) {
         coordY = Number(input.charAt(1)) - 1
-    }else {
-        displayMessage(`Invalid coordinate entered`)
+    } else {
+        coordY = 10
     }
-    return { x: coordX, y: coordY }
-    
+
+    if(coordX < 3 && coordY < 3 ) {
+        return { x: coordX, y: coordY }
+    } else {
+        displayMessage(`Invalid coordinate entered`)
+    }   
 }
 
 // this function should return `X` or `O` or undefined (carefull it's not a string )
