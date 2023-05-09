@@ -82,8 +82,17 @@ function processAICoordinate() {
 // the button labeled `Restart Game`
 function resetGame() {
     console.log(`resetGame()`);
+    document.querySelectorAll(".material-symbols-outlined").forEach((element) => element.innerHTML = "");
+    let selectBox = document.getElementById("gameMode");
+    let selectedValue = selectBox.value;
+        selectedValue = "";
+    console.log(selectedValue);
+    displayMessage("");
+    resetBoard();
     setHTMLvisibilityForInputGameMode(true);
-    setHTMLvisibilityForButtonLabeledReset(true);
+    setHTMLvisibilityForInputHumanCoordinates(false);
+    setHTMLvisibilityForInputAiCoordinatesInput(false);
+    setHTMLvisibilityForButtonLabeledReset(false);
 }
 
 // this function should change from A1..C3 to coordinates
