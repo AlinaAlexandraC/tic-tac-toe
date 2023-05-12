@@ -81,14 +81,19 @@ function processAICoordinate() {
 // this function is called when the user clicks on 
 // the button labeled `Restart Game`
 function resetGame() {
-    const cells = document.querySelectorAll('.cell');
-    cells.forEach(cell => {
-        cell.innerHTML = '';       
-    });
-    setHTMLvisibilityForInputHumanCoordinates(false)
-    setHTMLvisibilityForInputAiCoordinatesInput(false)
-    setHTMLvisibilityForButtonLabeledReset(false);
+    console.log(`resetGame()`);
+    document.querySelectorAll(".material-symbols-outlined").forEach((element) => element.innerHTML = "");
+    let selectBox = document.getElementById("gameMode");
+    let selectedValue = selectBox.value;
+        selectedValue = "";
+    console.log(selectedValue);
+    displayMessage("");
+    resetBoard();
     setHTMLvisibilityForInputGameMode(true);
+    setHTMLvisibilityForButtonLabeledReset(true);
+    setHTMLvisibilityForInputHumanCoordinates(false);
+    setHTMLvisibilityForInputAiCoordinatesInput(false);
+    setHTMLvisibilityForButtonLabeledReset(false);
 }
 
 // this function should change from A1..C3 to coordinates
