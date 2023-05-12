@@ -81,9 +81,14 @@ function processAICoordinate() {
 // this function is called when the user clicks on 
 // the button labeled `Restart Game`
 function resetGame() {
-    console.log(`resetGame()`);
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach(cell => {
+        cell.innerHTML = '';       
+    });
+    setHTMLvisibilityForInputHumanCoordinates(false)
+    setHTMLvisibilityForInputAiCoordinatesInput(false)
+    setHTMLvisibilityForButtonLabeledReset(false);
     setHTMLvisibilityForInputGameMode(true);
-    setHTMLvisibilityForButtonLabeledReset(true);
 }
 
 // this function should change from A1..C3 to coordinates
@@ -121,5 +126,33 @@ function extractCoordinates(input) {
 // this function should return `X` or `O` or undefined (carefull it's not a string )
 // based on interpreting the values in the board variable
 function getWinningPlayer(board) {
-    return undefined;
+    // horizontal wins
+    if(board[0][0] === currentPlayer && board[0][1] === currentPlayer && board[0][2] === currentPlayer) {
+        return currentPlayer;
+    }
+    if(board[1][0] === currentPlayer && board[1][1] === currentPlayer && board[1][2] === currentPlayer) {
+        return currentPlayer;
+    }
+    if(board[2][0] === currentPlayer && board[2][1] === currentPlayer && board[2][2] === currentPlayer) {
+        return currentPlayer;
+    }
+
+    // diagonal wins
+    if(board[0][0] === currentPlayer && board[1][1] === currentPlayer && board[2][2] === currentPlayer) {
+        return currentPlayer;
+    }
+    if(board[0][2] === currentPlayer && board[1][1] === currentPlayer && board[2][0] === currentPlayer) {
+        return currentPlayer;
+    }
+
+    // vertical wins
+    if(board[0][0] === currentPlayer && board[1][0] === currentPlayer && board[2][0] === currentPlayer) {
+        return currentPlayer;
+    }
+    if(board[0][1] === currentPlayer && board[1][1] === currentPlayer && board[2][1] === currentPlayer) {
+        return currentPlayer;
+    }
+    if(board[0][2] === currentPlayer && board[1][2] === currentPlayer && board[2][2] === currentPlayer) {
+        return currentPlayer;
+    }
 }
