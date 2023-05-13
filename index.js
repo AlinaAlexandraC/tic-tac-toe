@@ -90,7 +90,6 @@ function resetGame() {
     displayMessage("");
     resetBoard();
     setHTMLvisibilityForInputGameMode(true);
-    setHTMLvisibilityForButtonLabeledReset(true);
     setHTMLvisibilityForInputHumanCoordinates(false);
     setHTMLvisibilityForInputAiCoordinatesInput(false);
     setHTMLvisibilityForButtonLabeledReset(false);
