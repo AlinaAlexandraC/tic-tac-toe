@@ -62,6 +62,10 @@ function processHumanCoordinate(input) {
         displayMessage(`Position is already taken on board`);
     }
 
+    if (isPlayerYHuman === false) {
+        setHTMLvisibilityForInputHumanCoordinates(false);
+        setHTMLvisibilityForInputAiCoordinatesInput(true);
+    }
 
     const winningPlayer = getWinningPlayer(board);
     if (winningPlayer) {
@@ -80,17 +84,10 @@ function processHumanCoordinate(input) {
 
     // gameTurn += 1;
 
-    if (isPlayerYHuman === false) {
-        setHTMLvisibilityForInputHumanCoordinates(false);
-        setHTMLvisibilityForInputAiCoordinatesInput(true);
-    }
-
     displayBoard(board);
 
     //It's a tie mode
     
-
-
     // TODO: add a message stating either
     // Player X's turn
     // Player O's turn
@@ -137,6 +134,7 @@ function processAICoordinate() {
 
     gameTurn +=1
     displayBoard(board)
+    
 
     if (isPlayerXHuman === true) {
         setHTMLvisibilityForInputHumanCoordinates(true);
