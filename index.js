@@ -66,10 +66,17 @@ function processHumanCoordinate(input) {
         displayMessage(`Player ${currentPlayer} has won !`);
         setHTMLvisibilityForInputGameMode(false);
         setHTMLvisibilityForButtonLabeledReset(true);
+        setHTMLvisibilityForInputHumanCoordinates(false);
+        setHTMLvisibilityForInputAiCoordinatesInput(false);
     }
 
     gameTurn += 1;
     displayBoard(board);
+
+    //It's a tie mode
+    if (gameTurn === 9 && !winningPlayer) {
+        displayMessage("It's a tie");
+    }
     
     // TODO: add a message stating either
     // Player X's turn
@@ -129,6 +136,7 @@ function resetGame() {
     setHTMLvisibilityForInputAiCoordinatesInput(false);
     setHTMLvisibilityForButtonLabeledReset(false);
     document.getElementById('gameMode').selectedIndex = 0
+    gameTurn = 0;
 }
 
 // this function should change from A1..C3 to coordinates
