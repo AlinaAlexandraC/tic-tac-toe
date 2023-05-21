@@ -17,7 +17,7 @@ function setGameMode(selectedValue) {
             isPlayerXHuman = true;
             isPlayerYHuman = false;
             setHTMLvisibilityForInputHumanCoordinates(true);
-            setHTMLvisibilityForInputAiCoordinatesInput(true);
+            setHTMLvisibilityForInputAiCoordinatesInput(false);
             break;
         case 'ai-ai':
             isPlayerXHuman = false;
@@ -57,9 +57,11 @@ function processHumanCoordinate(input) {
     //position is already taken on the board
     if (board[coordinates.x][coordinates.y] === "") {
         board[coordinates.x][coordinates.y] = currentPlayer;
+        gameTurn += 1;
     } else {
         displayMessage(`Position is already taken on board`);
     }
+
 
     const winningPlayer = getWinningPlayer(board);
     if (winningPlayer) {
@@ -68,16 +70,27 @@ function processHumanCoordinate(input) {
         setHTMLvisibilityForButtonLabeledReset(true);
         setHTMLvisibilityForInputHumanCoordinates(false);
         setHTMLvisibilityForInputAiCoordinatesInput(false);
+    }else if (gameTurn === 9 && winningPlayer === 0) {
+        displayMessage("It's a tie");
+        setHTMLvisibilityForButtonLabeledReset(true);
+        setHTMLvisibilityForInputHumanCoordinates(false);
+        setHTMLvisibilityForInputAiCoordinatesInput(false);
+        setHTMLvisibilityForInputGameMode(false);
     }
 
-    gameTurn += 1;
+    // gameTurn += 1;
+
+    if (isPlayerYHuman === false) {
+        setHTMLvisibilityForInputHumanCoordinates(false);
+        setHTMLvisibilityForInputAiCoordinatesInput(true);
+    }
+
     displayBoard(board);
 
     //It's a tie mode
-    if (gameTurn === 9 && !winningPlayer) {
-        displayMessage("It's a tie");
-    }
     
+
+
     // TODO: add a message stating either
     // Player X's turn
     // Player O's turn
@@ -93,15 +106,21 @@ function processHumanCoordinate(input) {
 // this function is called whenever the user presses
 // the button labeled `Generate AI coordinates`
 function processAICoordinate() {
+    // let notStupidAi = true;
     console.log(`processAICoordinate()`);
     // setHTMLvisibilityForInputAiCoordinatesInput(true);
-    console.log(currentPlayer)
+    console.log(currentPlayer);
+    console.log(gameTurn);
     if (gameTurn % 2 === 0) {
         currentPlayer = 'diamond';
-        displayMessage("Player O's turn")
+        displayMessage("Player O's turn");
+        // setHTMLvisibilityForInputHumanCoordinates(false);
+        // setHTMLvisibilityForInputAiCoordinatesInput(true);
     } else {
         playerAI = 'pets';
-        displayMessage("Player X's turn")
+        displayMessage("Player X's turn");
+        // setHTMLvisibilityForInputHumanCoordinates(true);
+        // setHTMLvisibilityForInputAiCoordinatesInput(false);
     }
     // center
     if (board[1][1] === ""){ board[1][1] = playerAI } 
@@ -118,6 +137,25 @@ function processAICoordinate() {
 
     gameTurn +=1
     displayBoard(board)
+
+    if (isPlayerXHuman === true) {
+        setHTMLvisibilityForInputHumanCoordinates(true);
+        setHTMLvisibilityForInputAiCoordinatesInput(false);
+    }
+
+    const winningPlayer = getWinningPlayer(board);
+    if (winningPlayer) {
+        if (getWinningPlayer(board) === playerAI) {
+            displayMessage(`Player ${playerAI} has won !`);
+        }else {
+            displayMessage(`Player ${currentPlayer} has won !`);
+        }
+        setHTMLvisibilityForInputGameMode(false);
+        setHTMLvisibilityForButtonLabeledReset(true);
+        setHTMLvisibilityForInputHumanCoordinates(false);
+        setHTMLvisibilityForInputAiCoordinatesInput(false);
+
+    }
 }
 
 // this function is called when the user clicks on 
@@ -175,34 +213,36 @@ function extractCoordinates(input) {
 // based on interpreting the values in the board variable
 function getWinningPlayer(board) {
     // horizontal wins
-    if(board[0][0] === currentPlayer && board[0][1] === currentPlayer && board[0][2] === currentPlayer) {
+    if(board[0][0] === board[0][1] && board[0][1] === board[0][2]) {
         return board[0][0];
     }
-    if(board[1][0] === currentPlayer && board[1][1] === currentPlayer && board[1][2] === currentPlayer) {
+    if(board[1][0] === board[1][1] && board[1][1] === board[1][2]) {
         return board[1][0];
     }
-    if(board[2][0] === currentPlayer && board[2][1] === currentPlayer && board[2][2] === currentPlayer) {
+    if(board[2][0] === board[2][1] && board[2][1] === board[2][2]) {
         return board[2][0];
     }
 
     // diagonal wins
-    if(board[0][0] === currentPlayer && board[1][1] === currentPlayer && board[2][2] === currentPlayer) {
+    if(board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
         return board[0][0];
     }
-    if(board[0][2] === currentPlayer && board[1][1] === currentPlayer && board[2][0] === currentPlayer) {
+    if(board[0][2] === board[1][1] && board[1][1] === board[2][0]) {
         return board[0][2];
     }
 
     // vertical wins
-    if(board[0][0] === currentPlayer && board[1][0] === currentPlayer && board[2][0] === currentPlayer) {
+    if(board[0][0] === board[1][0] && board[1][0] === board[2][0]) {
         return board[0][0];
     }
-    if(board[0][1] === currentPlayer && board[1][1] === currentPlayer && board[2][1] === currentPlayer) {
+    if(board[0][1] === board[1][1] && board[1][1] === board[2][1]) {
         return board[0][1];
     }
-    if(board[0][2] === currentPlayer && board[1][2] === currentPlayer && board[2][2] === currentPlayer) {
+    if(board[0][2] === board[1][2] && board[1][2] === board[2][2]) {
         return board[0][2];
     }
+
+    return 0;
 }
 
 function getUnbeatableAiCoordinates() {
