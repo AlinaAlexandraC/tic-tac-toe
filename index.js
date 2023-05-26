@@ -81,16 +81,6 @@ function processHumanCoordinate(input) {
     }
 
     displayBoard(board);
-    // TODO: add a message stating either
-    // Player X's turn
-    // Player O's turn
-    // It's a tie
-    // Player X won 
-    // Player O won 
-
-    // TODO: add conditions to hide the coordinates screen for 
-    // the human player & show for the button to generate AI 
-    // coordinates
 }
 
 // this function is called whenever the user presses
@@ -105,12 +95,22 @@ function processAICoordinate() {
         displayMessage("Player X's turn");
     }
 
-    if (gameTurn < 3) {
-        getEmptySpace()
-    } else {
+    // if(gameTurn < 3) {
+    //     // center
+    //     if (board[1][1] === ""){ board[1][1] = playerAI } 
+    //     // corners
+    //     else if (board[0][2] === ""){ board[0][2] = playerAI } 
+    //     else if (board[2][2] === ""){ board[2][2] = playerAI } 
+    //     else if (board[2][0] === ""){ board[2][0] = playerAI } 
+    //     else if (board[0][0] === ""){ board[0][0] = playerAI }
+    //     // edges
+    //     else if (board[1][0] === ""){ board[1][0] = playerAI } 
+    //     else if (board[0][1] === ""){ board[0][1] = playerAI } 
+    //     else if (board[1][2] === ""){ board[1][2] = playerAI } 
+    //     else if (board[2][1] === ""){ board[2][1] = playerAI }
+    // } else {
         getUnbeatableAiCoordinates()
-    }
-
+    // }
 
     gameTurn +=1;
     displayBoard(board);
@@ -221,184 +221,14 @@ function getWinningPlayer(board) {
     return 0;
 }
 
-function getUnbeatableAiCoordinates() {
-    // goForEasyWin()
-    // preventEasyLose();
-    easyWinOrEasyLose("pets")
-    easyWinOrEasyLose("diamond")
-};
-
-function easyWinOrEasyLose(player) {
-    for (let i = 0; i < board[0].length; i++) {
-        if (board[i][0] === board[i][1] && board[i][1] === player && board[i][2] === "") {
-            board[i][2] = playerAI
-            break
-        }
-        if (board[0][i] === board[1][i] && board[1][i] === player && board[i][2] === "") {
-            board[2][i] = playerAI
-            break
-        }
-        if (board[i][1] === board[i][2] && board[i][2] === player && board[i][0] === "") {
-            board[i][0] = playerAI
-            break
-        }
-        if (board[1][i] === board[2][i] && board[2][i] === player && board[0][i] === "") {
-            board[0][i] = playerAI
-            break
-        }
-        if (board[i][0] === board[i][2] && board[i][2] === player && board[i][1] === "") {
-            board[i][1] = playerAI
-            break
-        }
-        if (board[0][i] === board[2][i] && board[2][i] === player && board[1][i] === "") {
-            board[1][i] = playerAI
-            break
-        }
-        
-        if(board[0][2] === board[2][0] && board[2][0] === player && board[1][1] === "") {
-            board[1][1] = playerAI
-            break
-        }
-        if(board[0][2] === board[1][1] && board[1][1] === player && board[2][0] === "") {
-            board[2][0] = playerAI
-            break
-        }
-        if(board[2][0] === board[1][1] && board[1][1] === player && board[0][2] === "") {
-            board[0][2] = playerAI
-            break
-        }
-        if(board[0][0] === board[1][1] && board[1][1] === player && board[2][2] === "") {
-            board[2][2] = playerAI
-            break
-        }
-        if(board[0][0] === board[2][2] && board[2][2] === player && board[1][1] === "") {
-            board[1][1] = playerAI
-            break
-        }
-        if(board[1][1] === board[2][2] && board[2][2] === player && board[0][0] === "") {
-            board[0][0] = playerAI
-            break
-        }
-    }
-}
-
-// function preventEasyLose() {
-//        // AI prevents easy lose
-//        for (let i = 0; i < board[0].length; i++) {
-//         if (board[i][0] === board[i][1] && board[i][1] === "diamond" && board[i][2] === "") {
-//             board[i][2] = playerAI;
-//             break;
-//         }
-//         if (board[0][i] === board[1][i] && board[1][i] === "diamond" && board[i][2] === "") {
-//             board[2][i] = playerAI;
-//             break;
-//         }
-//         if (board[i][1] === board[i][2] && board[i][2] === "diamond" && board[i][0] === "") {
-//             board[i][0] = playerAI;
-//             break;
-//         }
-//         if (board[1][i] === board[2][i] && board[2][i] === "diamond" && board[0][i] === "") {
-//             board[0][i] = playerAI;
-//             break;
-//         }
-//         if (board[i][0] === board[i][2] && board[i][2] === "diamond" && board[i][1] === "") {
-//             board[i][1] = playerAI;
-//             break;
-//         }
-//         if (board[0][i] === board[2][i] && board[2][i] === "diamond" && board[1][i] === "") {
-//             board[1][i] = playerAI;
-//             break;
-//         }
-
-//         if(board[0][2] === board[2][0] && board[2][0] === "diamond" && board[1][1] === "") {
-//             board[1][1] = playerAI;
-//             break;
-//         }
-//         if(board[0][2] === board[1][1] && board[1][1] === "diamond" && board[2][0] === "") {
-//             board[2][0] = playerAI;
-//             break;
-//         }
-//         if(board[2][0] === board[1][1] && board[1][1] === "diamond" && board[0][2] === "") {
-//            board[0][2] = playerAI;
-//            break;
-//         }
-//         if(board[0][0] === board[1][1] && board[1][1] === "diamond" && board[2][2] === "") {
-//            board[2][2] = playerAI;
-//            break;
-//         }
-//         if(board[0][0] === board[2][2] && board[2][2] === "diamond" && board[1][1] === "") {
-//            board[1][1] = playerAI;
-//            break;
-//         }
-//         if(board[1][1] === board[2][2] && board[2][2] === "diamond" && board[0][0] === "") {
-//            board[0][0] = playerAI;
-//            break;
-//         } else {
-//             return 0
-//         }
-//     }
-// }
-
-// function goForEasyWin() {
-//     // AI goes for easy win
-//     for (let i = 0; i < board[0].length; i++) {
-//         if (board[i][0] === board[i][1] && board[i][1] === "pets" && board[i][2] === "") {
-//             board[i][2] = playerAI;
-//             break;
-//         }
-//         if (board[0][i] === board[1][i] && board[1][i] === "pets" && board[i][2] === "") {
-//             board[2][i] = playerAI;
-//             break;
-//         }
-//         if (board[i][1] === board[i][2] && board[i][2] === "pets" && board[i][0] === "") {
-//             board[i][0] = playerAI;
-//             break;
-//         }
-//         if (board[1][i] === board[2][i] && board[2][i] === "pets" && board[0][i] === "") {
-//             board[0][i] = playerAI;
-//             break;
-//         }
-//         if (board[i][0] === board[i][2] && board[i][2] === "pets" && board[i][1] === "") {
-//             board[i][1] = playerAI;
-//             break;
-//         }
-//         if (board[0][i] === board[2][i] && board[2][i] === "pets" && board[1][i] === "") {
-//             board[1][i] = playerAI;
-//             break;
-//         }
-
-//         if(board[0][2] === board[2][0] && board[2][0] === "pets" && board[1][1] === "") {
-//             board[1][1] = playerAI;
-//             break;
-//         }
-//         if(board[0][2] === board[1][1] && board[1][1] === "pets" && board[2][0] === "") {
-//             board[2][0] = playerAI;
-//             break;
-//         }
-//         if(board[2][0] === board[1][1] && board[1][1] === "pets" && board[0][2] === "") {
-//             board[0][2] = playerAI;
-//             break;
-//         }
-//         if(board[0][0] === board[1][1] && board[1][1] === "pets" && board[2][2] === "") {
-//             board[2][2] = playerAI;
-//             break;
-//         }
-//         if(board[0][0] === board[2][2] && board[2][2] === "pets" && board[1][1] === "") {
-//            board[1][1] = playerAI;
-//            break;
-//         }
-//         if(board[1][1] === board[2][2] && board[2][2] === "pets" && board[0][0] === "") {
-//            board[0][0] = playerAI;
-//            break;
-//         } else {
-//             return 0
-//         }
-//     }
-// }
-
-function getEmptySpace(){
+function getUnbeatableAiCoordinates() {  
+    if(easyWinOrEasyLose(playerAI, easyWin) === true){
+        easyWinOrEasyLose(playerAI, easyWin)
+    } else if (easyWinOrEasyLose(playerAI, easyWin) === false && easyWinOrEasyLose(currentPlayer, easyLose) === true){
+        easyWinOrEasyLose(currentPlayer, easyLose);
+    } else {
         // center
-        if (board[1][1] === ""){ board[1][1] = playerAI } 
+        if (board[1][1] === ""){ board[1][1] = playerAI }
         // corners
         else if (board[0][2] === ""){ board[0][2] = playerAI } 
         else if (board[2][2] === ""){ board[2][2] = playerAI } 
@@ -409,4 +239,74 @@ function getEmptySpace(){
         else if (board[0][1] === ""){ board[0][1] = playerAI } 
         else if (board[1][2] === ""){ board[1][2] = playerAI } 
         else if (board[2][1] === ""){ board[2][1] = playerAI }
+    }
+};
+
+let easyWin = false
+let easyLose = false
+function easyWinOrEasyLose(player, param) {
+    for (let i = 0; i < board[0].length; i++) {        
+        if (board[i][0] === board[i][1] && board[i][1] === player && board[i][2] === "") {
+            board[i][2] = playerAI
+            param = true
+            break
+        }
+        if (board[0][i] === board[1][i] && board[1][i] === player && board[i][2] === "") {
+            board[2][i] = playerAI
+            param = true
+            break
+        }
+        if (board[i][1] === board[i][2] && board[i][2] === player && board[i][0] === "") {
+            board[i][0] = playerAI
+            param = true
+            break
+        }
+        if (board[1][i] === board[2][i] && board[2][i] === player && board[0][i] === "") {
+            board[0][i] = playerAI
+            param = true
+            break
+        }
+        if (board[i][0] === board[i][2] && board[i][2] === player && board[i][1] === "") {
+            board[i][1] = playerAI
+            param = true
+            break
+        }
+        if (board[0][i] === board[2][i] && board[2][i] === player && board[1][i] === "") {
+            board[1][i] = playerAI
+            param = true
+            break
+        }
+        
+        if(board[0][2] === board[2][0] && board[2][0] === player && board[1][1] === "") {
+            board[1][1] = playerAI
+            param = true
+            break
+        }
+        if(board[0][2] === board[1][1] && board[1][1] === player && board[2][0] === "") {
+            board[2][0] = playerAI
+            param = true
+            break
+        }
+        if(board[2][0] === board[1][1] && board[1][1] === player && board[0][2] === "") {
+            board[0][2] = playerAI
+            param = true
+            break
+        }
+        if(board[0][0] === board[1][1] && board[1][1] === player && board[2][2] === "") {
+            board[2][2] = playerAI
+            param = true
+            break
+        }
+        if(board[0][0] === board[2][2] && board[2][2] === player && board[1][1] === "") {
+            board[1][1] = playerAI
+            param = true
+            break
+        }
+        if(board[1][1] === board[2][2] && board[2][2] === player && board[0][0] === "") {
+            board[0][0] = playerAI
+            param = true
+            break
+        }
+    }
+    return param
 }
