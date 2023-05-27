@@ -2,6 +2,7 @@ let gameTurn = 0;
 let currentPlayer;
 let board;
 let playerAI;
+let secondAI;
 
 // this function will be called whenever the user changes
 // the `select` input labeled `please select game mode`
@@ -12,8 +13,6 @@ function setGameMode(selectedValue) {
             isPlayerYHuman = true;            
             setHTMLvisibilityForInputHumanCoordinates(true);
             setHTMLvisibilityForInputAiCoordinatesInput(false);
-            //document.getElementById('human-ai').disabled = true;
-            //document.getElementById('ai-ai').disabled = true;
             break;
         case 'human-ai':
             isPlayerXHuman = true;
@@ -30,8 +29,8 @@ function setGameMode(selectedValue) {
     }
     resetBoard();
 
-    setHTMLvisibilityForInputGameMode(true);
-    setHTMLvisibilityForButtonLabeledReset(false);
+    setHTMLvisibilityForInputGameMode(false);
+    setHTMLvisibilityForButtonLabeledReset(true);
     displayMessage("Player X's turn");
 }
 
@@ -56,7 +55,7 @@ function processHumanCoordinate(input) {
 
     //position is already taken on the board
    
-    if(board[coordinates.x][coordinates.y] !== "")  {
+    if(board[coordinates.x][coordinates.y] !== ""){
         displayMessage(`Position is already taken on board`);
         return
     } 
@@ -64,7 +63,6 @@ function processHumanCoordinate(input) {
     board[coordinates.x][coordinates.y] = currentPlayer;
         gameTurn += 1;
     
-    console.log(gameTurn)
     if (isPlayerYHuman === false) {
         setHTMLvisibilityForInputHumanCoordinates(false);
         setHTMLvisibilityForInputAiCoordinatesInput(true);
@@ -100,11 +98,7 @@ function processAICoordinate() {
         displayMessage("Player X's turn");
     }
 
-   getUnbeatableAiCoordinates()
-   
-
-    //gameTurn +=1;
-    //displayBoard(board);
+    getUnbeatableAiCoordinates(playerAI, currentPlayer)
     
     if (isPlayerXHuman === true) {
         setHTMLvisibilityForInputHumanCoordinates(true);
@@ -123,9 +117,20 @@ function processAICoordinate() {
         setHTMLvisibilityForInputHumanCoordinates(false);
         setHTMLvisibilityForInputAiCoordinatesInput(false);
     }
+
     gameTurn +=1;
     displayBoard(board);
-    console.log(gameTurn)
+
+    if(isPlayerXHuman === false && isPlayerYHuman === false){
+        if (gameTurn % 2 === 0) {
+            secondAI = 'diamond';
+            displayMessage("Player O's turn");            
+        } else {
+            playerAI = 'pets';
+            displayMessage("Player X's turn");
+        }
+        firstAI(secondAI, playerAI)
+    }
 }
 
 // this function is called when the user clicks on 
@@ -215,24 +220,45 @@ function getWinningPlayer(board) {
     return 0;
 }
 
-function getUnbeatableAiCoordinates() {  
-    if(easyWinOrEasyLose(playerAI, easyWin) === true){
-        easyWinOrEasyLose(playerAI, easyWin)
-    } else if (easyWinOrEasyLose(playerAI, easyWin) === false && easyWinOrEasyLose(currentPlayer, easyLose) === true){
-        easyWinOrEasyLose(currentPlayer, easyLose);
+// function getUnbeatableAiCoordinates() {  
+//     if(easyWinOrEasyLose(playerAI, easyWin) === true){
+//         easyWinOrEasyLose(playerAI, easyWin)
+//     } else if (easyWinOrEasyLose(playerAI, easyWin) === false && easyWinOrEasyLose(currentPlayer, easyLose) === true){
+//         easyWinOrEasyLose(currentPlayer, easyLose);
+//     } else {
+//         // center
+//         if (board[1][1] === ""){ board[1][1] = playerAI }
+//         // corners
+//         else if (board[0][2] === ""){ board[0][2] = playerAI } 
+//         else if (board[2][2] === ""){ board[2][2] = playerAI } 
+//         else if (board[2][0] === ""){ board[2][0] = playerAI } 
+//         else if (board[0][0] === ""){ board[0][0] = playerAI }
+//         // edges
+//         else if (board[1][0] === ""){ board[1][0] = playerAI } 
+//         else if (board[0][1] === ""){ board[0][1] = playerAI } 
+//         else if (board[1][2] === ""){ board[1][2] = playerAI } 
+//         else if (board[2][1] === ""){ board[2][1] = playerAI }
+//     }
+// };
+
+function getUnbeatableAiCoordinates(player1, player2) {  
+    if(easyWinOrEasyLose(player1, easyWin) === true){
+        easyWinOrEasyLose(player1, easyWin)
+    } else if (easyWinOrEasyLose(player1, easyWin) === false && easyWinOrEasyLose(player2, easyLose) === true){
+        easyWinOrEasyLose(player2, easyLose);
     } else {
         // center
-        if (board[1][1] === ""){ board[1][1] = playerAI }
+        if (board[1][1] === ""){ board[1][1] = player1 }
         // corners
-        else if (board[0][2] === ""){ board[0][2] = playerAI } 
-        else if (board[2][2] === ""){ board[2][2] = playerAI } 
-        else if (board[2][0] === ""){ board[2][0] = playerAI } 
-        else if (board[0][0] === ""){ board[0][0] = playerAI }
+        else if (board[0][2] === ""){ board[0][2] = player1 } 
+        else if (board[2][2] === ""){ board[2][2] = player1 } 
+        else if (board[2][0] === ""){ board[2][0] = player1 } 
+        else if (board[0][0] === ""){ board[0][0] = player1 }
         // edges
-        else if (board[1][0] === ""){ board[1][0] = playerAI } 
-        else if (board[0][1] === ""){ board[0][1] = playerAI } 
-        else if (board[1][2] === ""){ board[1][2] = playerAI } 
-        else if (board[2][1] === ""){ board[2][1] = playerAI }
+        else if (board[1][0] === ""){ board[1][0] = player1 } 
+        else if (board[0][1] === ""){ board[0][1] = player1 } 
+        else if (board[1][2] === ""){ board[1][2] = player1 } 
+        else if (board[2][1] === ""){ board[2][1] = player1 }
     }
 };
 
@@ -305,4 +331,91 @@ function easyWinOrEasyLose(player, param) {
     return param
 }
 
+function firstAI (player1, player2){
+    if(easyWinOrEasyLoseForSecondAI(player1, easyWin) === true){
+        easyWinOrEasyLoseForSecondAI(player1, easyWin)
+    } else if (easyWinOrEasyLoseForSecondAI(player1, easyWin) === false && easyWinOrEasyLoseForSecondAI(player2, easyLose) === true){
+        easyWinOrEasyLoseForSecondAI(player2, easyLose);
+    } else {
+        // center
+        if (board[1][1] === ""){ board[1][1] = player1 }
+        // corners
+        else if (board[0][2] === ""){ board[0][2] = player1 } 
+        else if (board[2][2] === ""){ board[2][2] = player1 } 
+        else if (board[2][0] === ""){ board[2][0] = player1 } 
+        else if (board[0][0] === ""){ board[0][0] = player1 }
+        // edges
+        else if (board[1][0] === ""){ board[1][0] = player1 } 
+        else if (board[0][1] === ""){ board[0][1] = player1 } 
+        else if (board[1][2] === ""){ board[1][2] = player1 } 
+        else if (board[2][1] === ""){ board[2][1] = player1 }
+    }
+    displayBoard()
+}
 
+function easyWinOrEasyLoseForSecondAI(player, param) {
+    for (let i = 0; i < board[0].length; i++) {        
+        if (board[i][0] === board[i][1] && board[i][1] === player && board[i][2] === "") {
+            board[i][2] = secondAI
+            param = true
+            break
+        }
+        if (board[0][i] === board[1][i] && board[1][i] === player && board[2][i] === "") {
+            board[2][i] = secondAI
+            param = true
+            break
+        }
+        if (board[i][1] === board[i][2] && board[i][2] === player && board[i][0] === "") {
+            board[i][0] = secondAI
+            param = true
+            break
+        }
+        if (board[1][i] === board[2][i] && board[2][i] === player && board[0][i] === "") {
+            board[0][i] = secondAI
+            param = true
+            break
+        }
+        if (board[i][0] === board[i][2] && board[i][2] === player && board[i][1] === "") {
+            board[i][1] = secondAI
+            param = true
+            break
+        }
+        if (board[0][i] === board[2][i] && board[2][i] === player && board[1][i] === "") {
+            board[1][i] = secondAI
+            param = true
+            break
+        }
+        
+        if(board[0][2] === board[2][0] && board[2][0] === player && board[1][1] === "") {
+            board[1][1] = secondAI
+            param = true
+            break
+        }
+        if(board[0][2] === board[1][1] && board[1][1] === player && board[2][0] === "") {
+            board[2][0] = secondAI
+            param = true
+            break
+        }
+        if(board[2][0] === board[1][1] && board[1][1] === player && board[0][2] === "") {
+            board[0][2] = secondAI
+            param = true
+            break
+        }
+        if(board[0][0] === board[1][1] && board[1][1] === player && board[2][2] === "") {
+            board[2][2] = secondAI
+            param = true
+            break
+        }
+        if(board[0][0] === board[2][2] && board[2][2] === player && board[1][1] === "") {
+            board[1][1] = secondAI
+            param = true
+            break
+        }
+        if(board[1][1] === board[2][2] && board[2][2] === player && board[0][0] === "") {
+            board[0][0] = secondAI
+            param = true
+            break
+        }
+    }
+    return param
+}
