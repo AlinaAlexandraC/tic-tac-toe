@@ -12,6 +12,8 @@ function setGameMode(selectedValue) {
             isPlayerYHuman = true;            
             setHTMLvisibilityForInputHumanCoordinates(true);
             setHTMLvisibilityForInputAiCoordinatesInput(false);
+            //document.getElementById('human-ai').disabled = true;
+            //document.getElementById('ai-ai').disabled = true;
             break;
         case 'human-ai':
             isPlayerXHuman = true;
@@ -53,13 +55,16 @@ function processHumanCoordinate(input) {
     inputField.value = '';
 
     //position is already taken on the board
-    if (board[coordinates.x][coordinates.y] === "") {
-        board[coordinates.x][coordinates.y] = currentPlayer;
-        gameTurn += 1;
-    } else {
+   
+    if(board[coordinates.x][coordinates.y] !== "")  {
         displayMessage(`Position is already taken on board`);
-    }
-
+        return
+    } 
+    
+    board[coordinates.x][coordinates.y] = currentPlayer;
+        gameTurn += 1;
+    
+    console.log(gameTurn)
     if (isPlayerYHuman === false) {
         setHTMLvisibilityForInputHumanCoordinates(false);
         setHTMLvisibilityForInputAiCoordinatesInput(true);
@@ -95,25 +100,11 @@ function processAICoordinate() {
         displayMessage("Player X's turn");
     }
 
-    // if(gameTurn < 3) {
-    //     // center
-    //     if (board[1][1] === ""){ board[1][1] = playerAI } 
-    //     // corners
-    //     else if (board[0][2] === ""){ board[0][2] = playerAI } 
-    //     else if (board[2][2] === ""){ board[2][2] = playerAI } 
-    //     else if (board[2][0] === ""){ board[2][0] = playerAI } 
-    //     else if (board[0][0] === ""){ board[0][0] = playerAI }
-    //     // edges
-    //     else if (board[1][0] === ""){ board[1][0] = playerAI } 
-    //     else if (board[0][1] === ""){ board[0][1] = playerAI } 
-    //     else if (board[1][2] === ""){ board[1][2] = playerAI } 
-    //     else if (board[2][1] === ""){ board[2][1] = playerAI }
-    // } else {
-        getUnbeatableAiCoordinates()
-    // }
+   getUnbeatableAiCoordinates()
+   
 
-    gameTurn +=1;
-    displayBoard(board);
+    //gameTurn +=1;
+    //displayBoard(board);
     
     if (isPlayerXHuman === true) {
         setHTMLvisibilityForInputHumanCoordinates(true);
@@ -132,6 +123,9 @@ function processAICoordinate() {
         setHTMLvisibilityForInputHumanCoordinates(false);
         setHTMLvisibilityForInputAiCoordinatesInput(false);
     }
+    gameTurn +=1;
+    displayBoard(board);
+    console.log(gameTurn)
 }
 
 // this function is called when the user clicks on 
@@ -251,7 +245,7 @@ function easyWinOrEasyLose(player, param) {
             param = true
             break
         }
-        if (board[0][i] === board[1][i] && board[1][i] === player && board[i][2] === "") {
+        if (board[0][i] === board[1][i] && board[1][i] === player && board[2][i] === "") {
             board[2][i] = playerAI
             param = true
             break
@@ -310,3 +304,5 @@ function easyWinOrEasyLose(player, param) {
     }
     return param
 }
+
+
