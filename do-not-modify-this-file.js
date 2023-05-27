@@ -74,6 +74,7 @@ function setHTMLvisibilityForInputAiCoordinatesInput(isVisible) {
     }
 }
 
+
 // isVisible = true  - will show the element
 // isVisible = false - will hide the element
 function setHTMLvisibilityForButtonLabeledReset(isVisible) {
