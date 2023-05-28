@@ -69,20 +69,7 @@ function processHumanCoordinate(input) {
         setHTMLvisibilityForInputAiCoordinatesInput(true);
     }
 
-    const winningPlayer = getWinningPlayer(board);
-    if (winningPlayer) {
-        displayMessage(`Player ${currentPlayer} has won !`);
-        setHTMLvisibilityForInputGameMode(false);
-        setHTMLvisibilityForButtonLabeledReset(true);
-        setHTMLvisibilityForInputHumanCoordinates(false);
-        setHTMLvisibilityForInputAiCoordinatesInput(false);
-    }else if (gameTurn === 9 && winningPlayer === 0) {
-        displayMessage("It's a tie");
-        setHTMLvisibilityForButtonLabeledReset(true);
-        setHTMLvisibilityForInputHumanCoordinates(false);
-        setHTMLvisibilityForInputAiCoordinatesInput(false);
-        setHTMLvisibilityForInputGameMode(false);
-    }
+    endOfGameSetUp()
 
     displayBoard(board);
 }
@@ -141,18 +128,7 @@ function processAICoordinate() {
         setHTMLvisibilityForInputAiCoordinatesInput(false);
     }
 
-    const winningPlayer = getWinningPlayer(board);
-    if (winningPlayer) {
-        if (getWinningPlayer(board) === playerAI) {
-            displayMessage(`Player ${playerAI} has won !`);
-        }else {
-            displayMessage(`Player  ${currentPlayer !== undefined ? currentPlayer : secondAI} has won !`);
-        }
-        setHTMLvisibilityForInputGameMode(false);
-        setHTMLvisibilityForButtonLabeledReset(true);
-        setHTMLvisibilityForInputHumanCoordinates(false);
-        setHTMLvisibilityForInputAiCoordinatesInput(false);
-    }
+    endOfGameSetUp()
 
     gameTurn +=1;
     displayBoard(board);
@@ -196,11 +172,8 @@ function extractCoordinates(input) {
     if (input.charAt(0) === "C" || input.charAt(0) === "c") {
         coordX = 2
     }
-    if (0 < Number(input.charAt(1)) <= 3) {
-        coordY = Number(input.charAt(1)) - 1
-    } else {
-        coordY = 10
-    }
+    
+    coordY = Number(input.charAt(1)) - 1
 
     if(coordX < 3 && coordY < 3 && input.length === 2) {
         return { x: coordX, y: coordY }
@@ -271,37 +244,43 @@ let easyWin = false
 let easyLose = false
 function easyWinOrEasyLose(player, param) {
     for (let i = 0; i < board[0].length; i++) {        
+        // columns
         if (board[i][0] === board[i][1] && board[i][1] === player && board[i][2] === "") {
             board[i][2] = playerAI
             param = true
             break
         }
+        // rows
         if (board[0][i] === board[1][i] && board[1][i] === player && board[2][i] === "") {
             board[2][i] = playerAI
             param = true
             break
         }
+        // skipped columns
         if (board[i][1] === board[i][2] && board[i][2] === player && board[i][0] === "") {
             board[i][0] = playerAI
             param = true
             break
         }
+        // skipped rows
         if (board[1][i] === board[2][i] && board[2][i] === player && board[0][i] === "") {
             board[0][i] = playerAI
             param = true
             break
-        }
+        } 
+        // columns from bottom to top
         if (board[i][0] === board[i][2] && board[i][2] === player && board[i][1] === "") {
             board[i][1] = playerAI
             param = true
             break
         }
+        // rows from right to left
         if (board[0][i] === board[2][i] && board[2][i] === player && board[1][i] === "") {
             board[1][i] = playerAI
             param = true
             break
         }
-        
+        // diagonals
         if(board[0][2] === board[2][0] && board[2][0] === player && board[1][1] === "") {
             board[1][1] = playerAI
             param = true
@@ -333,5 +312,33 @@ function easyWinOrEasyLose(player, param) {
             break
         }
     }
+    console.log(gameTurn)
     return param
+}
+
+function endOfGameSetUp(){
+    const winningPlayer = getWinningPlayer(board);
+    if (winningPlayer) {
+        if (getWinningPlayer(board) === playerAI) {
+            displayMessage(`Player ${playerAI} has won !`);
+        } else {
+            displayMessage(`Player  ${currentPlayer !== undefined ? currentPlayer : secondAI} has won !`);
+        }
+        setHTMLvisibilityForInputGameMode(false);
+        setHTMLvisibilityForButtonLabeledReset(true);
+        setHTMLvisibilityForInputHumanCoordinates(false);
+        setHTMLvisibilityForInputAiCoordinatesInput(false);
+    }
+}
+
+// coord = thisFunction(board)
+// board[coord.x][coord.y] = playerAI
+// [ x     0     x ] countX = 2; return
+// [" "    x     0 ]
+// [ x    " "   " "]
+
+// opposite corners
+
+function oppositeCorners(player){
+    let corners = ["diamond", "", "diamond"]
 }
