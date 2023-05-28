@@ -57,6 +57,7 @@ function processHumanCoordinate(input) {
    
     if(board[coordinates.x][coordinates.y] !== ""){
         displayMessage(`Position is already taken on board`);
+        //with this return, gameTurn is not skipped when position is already taken
         return
     } 
     
@@ -132,7 +133,7 @@ function processAICoordinate() {
             }
         }
     }else {
-        getUnbeatableAiCoordinates(playerAI,secondAI);
+        getUnbeatableAiCoordinates();
     }
     
     if (isPlayerXHuman === true) {
@@ -250,9 +251,6 @@ function getUnbeatableAiCoordinates() {
     } else if (easyWinOrEasyLose(playerAI, easyWin) === false && easyWinOrEasyLose(currentPlayer, easyLose) === true){
         easyWinOrEasyLose(currentPlayer, easyLose);
     }
-    //  else if (easyWinOrEasyLose(playerAI, easyWin) === false && easyWinOrEasyLose(secondAI, easyLose) === true) {
-    //     easyWinOrEasyLose(secondAI, easyLose);
-    // } 
     else {
         // center
         if (board[1][1] === ""){ board[1][1] = playerAI }
