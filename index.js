@@ -201,7 +201,7 @@ function extractCoordinates(input) {
         coordY = 10
     }
 
-    if(coordX < 3 && coordY < 3 ) {
+    if(coordX < 3 && coordY < 3 && input.length === 2) {
         return { x: coordX, y: coordY }
     } else {
         displayMessage(`Invalid coordinate entered`)
