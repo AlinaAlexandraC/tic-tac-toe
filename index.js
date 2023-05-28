@@ -95,29 +95,21 @@ function processAICoordinate() {
         let coordY = Math.floor(Math.random() * 3);
 
         if (gameTurn % 2 === 0) {
-            playerAI = 'diamond';
+            secondAI = 'diamond';
             displayMessage("Player O's turn");
             if (board[coordX][coordY] === "") {
-                board[coordX][coordY] = playerAI;                
+                board[coordX][coordY] = secondAI;                
             } else {
                 coordX = Math.floor(Math.random() * 3);
                 coordY = Math.floor(Math.random() * 3);
                 if (board[coordX][coordY] === "") {
-                    board[coordX][coordY] = playerAI;        
+                    board[coordX][coordY] = secondAI;        
                 }
             }
         } else {
-            secondAI = 'pets';
+            playerAI = 'pets';
             displayMessage("Player X's turn");
-            if (board[coordX][coordY] === "") {
-                board[coordX][coordY] = secondAI;                
-            }else {
-                coordX = Math.floor(Math.random() * 3);
-                coordY = Math.floor(Math.random() * 3);
-                if (board[coordX][coordY] === "") {
-                    board[coordX][coordY] = secondAI;       
-                }
-            }
+            getUnbeatableAiCoordinates()
         }
     }else {
         getUnbeatableAiCoordinates();
@@ -219,7 +211,14 @@ function getWinningPlayer(board) {
 }
 
 function getUnbeatableAiCoordinates() {
-    if(easyWinOrEasyLose(playerAI, easyWin) === true){
+    if(gameTurn === 1 && oppositeCorners(oppositeC) === true){
+        if(board[1][1] === ""){
+            board[1][1] = playerAI
+        }
+    }
+    if(gameTurn < 4 && gameTurn !== 1 && oppositeCorners(oppositeC) === true){
+        oppositeCorners(oppositeC)
+    } else if(easyWinOrEasyLose(playerAI, easyWin) === true){
         easyWinOrEasyLose(playerAI, easyWin)
     } else if (easyWinOrEasyLose(playerAI, easyWin) === false && easyWinOrEasyLose(currentPlayer, easyLose) === true){
         easyWinOrEasyLose(currentPlayer, easyLose);
@@ -227,15 +226,6 @@ function getUnbeatableAiCoordinates() {
     else {
         // center
         if (board[1][1] === ""){ board[1][1] = playerAI }
-        
-
-        // else if (board[0][0] === board[2][2] && board[2][2] === "diamond"  && board[1][0] === "") {
-        //     board[1][0] === playerAI;
-        // }
-        // else if (board[0][2] === board[2][0] && board[2][0] === "diamond" && board[0][1] === "") {
-        //     board[0][1] === playerAI;
-        // }
-
         // corners
         else if (board[0][2] === ""){ board[0][2] = playerAI } 
         else if (board[2][2] === ""){ board[2][2] = playerAI } 
@@ -278,11 +268,11 @@ function easyWinOrEasyLose(player, param) {
             break
         } 
         // columns from bottom to top
-        // if (board[i][0] === board[i][2] && board[i][2] === player && board[i][1] === "") {
-        //     board[i][1] = playerAI
-        //     param = true
-        //     break
-        // }
+        if (board[i][0] === board[i][2] && board[i][2] === player && board[i][1] === "") {
+            board[i][1] = playerAI
+            param = true
+            break
+        }
         // rows from right to left
         if (board[0][i] === board[2][i] && board[2][i] === player && board[1][i] === "") {
             board[1][i] = playerAI
@@ -337,17 +327,26 @@ function endOfGameSetUp(){
         setHTMLvisibilityForButtonLabeledReset(true);
         setHTMLvisibilityForInputHumanCoordinates(false);
         setHTMLvisibilityForInputAiCoordinatesInput(false);
+    } else if (gameTurn === 9 && winningPlayer === 0) {
+        displayMessage("It's a tie");
+        setHTMLvisibilityForButtonLabeledReset(true);
+        setHTMLvisibilityForInputHumanCoordinates(false);
+        setHTMLvisibilityForInputAiCoordinatesInput(false);
+        setHTMLvisibilityForInputGameMode(false);
     }
 }
 
-// coord = thisFunction(board)
-// board[coord.x][coord.y] = playerAI
-// [ x     0     x ] countX = 2; return
-// [" "    x     0 ]
-// [ x    " "   " "]
-
 // opposite corners
 
-function oppositeCorners(player){
-    let corners = ["diamond", "", "diamond"]
+let oppositeC = false
+function oppositeCorners(param){
+    if(board[0][0] === "diamond" && board[2][2] === "diamond"){
+        board[1][0] = playerAI
+        param = true
+    }
+    if(board[0][2] === "diamond" && board[2][0] === "diamond"){
+        board[1][2] = playerAI
+        param = true
+    }
+    return param
 }
