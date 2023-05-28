@@ -103,21 +103,36 @@ function processAICoordinate() {
 
     //ai vs ai mode
     if (isPlayerXHuman === false && isPlayerYHuman === false) {
-        console.log("ma duc unde trebuie");
+        let coordX = Math.floor(Math.random() * 3);
+        let coordY = Math.floor(Math.random() * 3);
+
         if (gameTurn % 2 === 0) {
             playerAI = 'diamond';
             displayMessage("Player O's turn");
+            if (board[coordX][coordY] === "") {
+                board[coordX][coordY] = playerAI;                
+            } else {
+                coordX = Math.floor(Math.random() * 3);
+                coordY = Math.floor(Math.random() * 3);
+                if (board[coordX][coordY] === "") {
+                    board[coordX][coordY] = playerAI;        
+                }
+            }
         } else {
             secondAI = 'pets';
             displayMessage("Player X's turn");
+            if (board[coordX][coordY] === "") {
+                board[coordX][coordY] = secondAI;                
+            }else {
+                coordX = Math.floor(Math.random() * 3);
+                coordY = Math.floor(Math.random() * 3);
+                if (board[coordX][coordY] === "") {
+                    board[coordX][coordY] = secondAI;       
+                }
+            }
         }
-
-        getUnbeatableAiCoordinates(playerAI,secondAI);
-        console.log("game turn ", gameTurn);
-        console.log("jucatorul nostru ",playerAI);
-        console.log("jucatorul prost ",secondAI);
     }else {
-        getUnbeatableAiCoordinates(playerAI, currentPlayer)
+        getUnbeatableAiCoordinates(playerAI,secondAI);
     }
     
     if (isPlayerXHuman === true) {
@@ -130,7 +145,7 @@ function processAICoordinate() {
         if (getWinningPlayer(board) === playerAI) {
             displayMessage(`Player ${playerAI} has won !`);
         }else {
-            displayMessage(`Player ${currentPlayer} has won !`);
+            displayMessage(`Player  ${currentPlayer !== undefined ? currentPlayer : secondAI} has won !`);
         }
         setHTMLvisibilityForInputGameMode(false);
         setHTMLvisibilityForButtonLabeledReset(true);
@@ -234,9 +249,11 @@ function getUnbeatableAiCoordinates() {
         easyWinOrEasyLose(playerAI, easyWin)
     } else if (easyWinOrEasyLose(playerAI, easyWin) === false && easyWinOrEasyLose(currentPlayer, easyLose) === true){
         easyWinOrEasyLose(currentPlayer, easyLose);
-    } else if (easyWinOrEasyLose(playerAI, easyWin) === false && easyWinOrEasyLose(secondAI, easyLose) === true) {
-        easyWinOrEasyLose(secondAI, easyLose);
-    } else {
+    }
+    //  else if (easyWinOrEasyLose(playerAI, easyWin) === false && easyWinOrEasyLose(secondAI, easyLose) === true) {
+    //     easyWinOrEasyLose(secondAI, easyLose);
+    // } 
+    else {
         // center
         if (board[1][1] === ""){ board[1][1] = playerAI }
         // corners
