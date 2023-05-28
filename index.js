@@ -218,7 +218,7 @@ function getWinningPlayer(board) {
     return 0;
 }
 
-function getUnbeatableAiCoordinates() {  
+function getUnbeatableAiCoordinates() {
     if(easyWinOrEasyLose(playerAI, easyWin) === true){
         easyWinOrEasyLose(playerAI, easyWin)
     } else if (easyWinOrEasyLose(playerAI, easyWin) === false && easyWinOrEasyLose(currentPlayer, easyLose) === true){
@@ -227,6 +227,15 @@ function getUnbeatableAiCoordinates() {
     else {
         // center
         if (board[1][1] === ""){ board[1][1] = playerAI }
+        
+
+        // else if (board[0][0] === board[2][2] && board[2][2] === "diamond"  && board[1][0] === "") {
+        //     board[1][0] === playerAI;
+        // }
+        // else if (board[0][2] === board[2][0] && board[2][0] === "diamond" && board[0][1] === "") {
+        //     board[0][1] === playerAI;
+        // }
+
         // corners
         else if (board[0][2] === ""){ board[0][2] = playerAI } 
         else if (board[2][2] === ""){ board[2][2] = playerAI } 
@@ -243,7 +252,7 @@ function getUnbeatableAiCoordinates() {
 let easyWin = false
 let easyLose = false
 function easyWinOrEasyLose(player, param) {
-    for (let i = 0; i < board[0].length; i++) {        
+    for (let i = 0; i < board[0].length; i++) {      
         // columns
         if (board[i][0] === board[i][1] && board[i][1] === player && board[i][2] === "") {
             board[i][2] = playerAI
@@ -269,11 +278,11 @@ function easyWinOrEasyLose(player, param) {
             break
         } 
         // columns from bottom to top
-        if (board[i][0] === board[i][2] && board[i][2] === player && board[i][1] === "") {
-            board[i][1] = playerAI
-            param = true
-            break
-        }
+        // if (board[i][0] === board[i][2] && board[i][2] === player && board[i][1] === "") {
+        //     board[i][1] = playerAI
+        //     param = true
+        //     break
+        // }
         // rows from right to left
         if (board[0][i] === board[2][i] && board[2][i] === player && board[1][i] === "") {
             board[1][i] = playerAI
