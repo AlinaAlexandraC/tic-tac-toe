@@ -91,28 +91,36 @@ function processAICoordinate() {
 
     //ai vs ai mode
     if (isPlayerXHuman === false && isPlayerYHuman === false) {
-        let coordX = Math.floor(Math.random() * 3);
-        let coordY = Math.floor(Math.random() * 3);
+        // let coordX = Math.floor(Math.random() * 3);
+        // let coordY = Math.floor(Math.random() * 3);
 
         if (gameTurn % 2 === 0) {
             secondAI = 'diamond';
             displayMessage("Player O's turn");
-            if (board[coordX][coordY] === "") {
-                board[coordX][coordY] = secondAI;                
-            } else {
-                coordX = Math.floor(Math.random() * 3);
-                coordY = Math.floor(Math.random() * 3);
-                if (board[coordX][coordY] === "") {
-                    board[coordX][coordY] = secondAI;        
-                }
-            }
+            // if(gameTurn < 3){
+            //     if (board[coordX][coordY] === "") {
+            //         board[coordX][coordY] = secondAI;                
+            //     } else {
+            //         coordX = Math.floor(Math.random() * 3);
+            //         coordY = Math.floor(Math.random() * 3);
+            //         if (board[coordX][coordY] === "") {
+            //             board[coordX][coordY] = secondAI;        
+            //         }
+            //     getUnbeatableAiCoordinatesForXAI()
+            //     }
+            // } else {
+                getUnbeatableAiCoordinatesForXAI()
+            // }            
         } else {
             playerAI = 'pets';
             displayMessage("Player X's turn");
-            getUnbeatableAiCoordinates()
+            getUnbeatableAiCoordinates(secondAI)
         }
-    }else {
-        getUnbeatableAiCoordinates();
+        console.log(gameTurn)
+        console.log(board)
+        // displayBoard(board);
+    } else {
+        getUnbeatableAiCoordinates(currentPlayer);
     }
     
     if (isPlayerXHuman === true) {
@@ -121,7 +129,7 @@ function processAICoordinate() {
     }
 
     endOfGameSetUp()
-
+    
     gameTurn +=1;
     displayBoard(board);
 }
@@ -210,7 +218,8 @@ function getWinningPlayer(board) {
     return 0;
 }
 
-function getUnbeatableAiCoordinates() {
+function getUnbeatableAiCoordinates(opponent) {
+    console.log("getUnbeatableAiCoordinates()")
     if(gameTurn === 1 && oppositeCorners(oppositeC) === true){
         if(board[1][1] === ""){
             board[1][1] = playerAI
@@ -218,100 +227,88 @@ function getUnbeatableAiCoordinates() {
     }
     if(gameTurn < 4 && gameTurn !== 1 && oppositeCorners(oppositeC) === true){
         oppositeCorners(oppositeC)
-    } else if(easyWinOrEasyLose(playerAI, easyWin) === true){
-        easyWinOrEasyLose(playerAI, easyWin)
-    } else if (easyWinOrEasyLose(playerAI, easyWin) === false && easyWinOrEasyLose(currentPlayer, easyLose) === true){
-        easyWinOrEasyLose(currentPlayer, easyLose);
+    } else if(easyWinOrEasyLose(playerAI, easyWin, playerAI) === true){
+        easyWinOrEasyLose(playerAI, easyWin, playerAI)
+    } else if (easyWinOrEasyLose(playerAI, easyWin, playerAI) === false && easyWinOrEasyLose(opponent, easyLose, playerAI) === true){
+        easyWinOrEasyLose(opponent, easyLose, playerAI);
     }
     else {
-        // center
-        if (board[1][1] === ""){ board[1][1] = playerAI }
-        // corners
-        else if (board[0][2] === ""){ board[0][2] = playerAI } 
-        else if (board[2][2] === ""){ board[2][2] = playerAI } 
-        else if (board[2][0] === ""){ board[2][0] = playerAI } 
-        else if (board[0][0] === ""){ board[0][0] = playerAI }
-        // edges
-        else if (board[1][0] === ""){ board[1][0] = playerAI } 
-        else if (board[0][1] === ""){ board[0][1] = playerAI } 
-        else if (board[1][2] === ""){ board[1][2] = playerAI } 
-        else if (board[2][1] === ""){ board[2][1] = playerAI }
+        extraMoves(playerAI)
     }
 };
 
 let easyWin = false
 let easyLose = false
-function easyWinOrEasyLose(player, param) {
+function easyWinOrEasyLose(playerToCheck, param, playerToMakeAMove) {
     for (let i = 0; i < board[0].length; i++) {      
         // columns
-        if (board[i][0] === board[i][1] && board[i][1] === player && board[i][2] === "") {
-            board[i][2] = playerAI
+        if (board[i][0] === board[i][1] && board[i][1] === playerToCheck && board[i][2] === "") {
+            board[i][2] = playerToMakeAMove
             param = true
             break
         }
         // rows
-        if (board[0][i] === board[1][i] && board[1][i] === player && board[2][i] === "") {
-            board[2][i] = playerAI
+        if (board[0][i] === board[1][i] && board[1][i] === playerToCheck && board[2][i] === "") {
+            board[2][i] = playerToMakeAMove
             param = true
             break
         }
         // skipped columns
-        if (board[i][1] === board[i][2] && board[i][2] === player && board[i][0] === "") {
-            board[i][0] = playerAI
+        if (board[i][1] === board[i][2] && board[i][2] === playerToCheck && board[i][0] === "") {
+            board[i][0] = playerToMakeAMove
             param = true
             break
         }
         // skipped rows
-        if (board[1][i] === board[2][i] && board[2][i] === player && board[0][i] === "") {
-            board[0][i] = playerAI
+        if (board[1][i] === board[2][i] && board[2][i] === playerToCheck && board[0][i] === "") {
+            board[0][i] = playerToMakeAMove
             param = true
             break
         } 
         // columns from bottom to top
-        if (board[i][0] === board[i][2] && board[i][2] === player && board[i][1] === "") {
-            board[i][1] = playerAI
+        if (board[i][0] === board[i][2] && board[i][2] === playerToCheck && board[i][1] === "") {
+            board[i][1] = playerToMakeAMove
             param = true
             break
         }
         // rows from right to left
-        if (board[0][i] === board[2][i] && board[2][i] === player && board[1][i] === "") {
-            board[1][i] = playerAI
+        if (board[0][i] === board[2][i] && board[2][i] === playerToCheck && board[1][i] === "") {
+            board[1][i] = playerToMakeAMove
             param = true
             break
         }
         // diagonals
-        if(board[0][2] === board[2][0] && board[2][0] === player && board[1][1] === "") {
-            board[1][1] = playerAI
+        if(board[0][2] === board[2][0] && board[2][0] === playerToCheck && board[1][1] === "") {
+            board[1][1] = playerToMakeAMove
             param = true
             break
         }
-        if(board[0][2] === board[1][1] && board[1][1] === player && board[2][0] === "") {
-            board[2][0] = playerAI
+        if(board[0][2] === board[1][1] && board[1][1] === playerToCheck && board[2][0] === "") {
+            board[2][0] = playerToMakeAMove
             param = true
             break
         }
-        if(board[2][0] === board[1][1] && board[1][1] === player && board[0][2] === "") {
-            board[0][2] = playerAI
+        if(board[2][0] === board[1][1] && board[1][1] === playerToCheck && board[0][2] === "") {
+            board[0][2] = playerToMakeAMove
             param = true
             break
         }
-        if(board[0][0] === board[1][1] && board[1][1] === player && board[2][2] === "") {
-            board[2][2] = playerAI
+        if(board[0][0] === board[1][1] && board[1][1] === playerToCheck && board[2][2] === "") {
+            board[2][2] = playerToMakeAMove
             param = true
             break
         }
-        if(board[0][0] === board[2][2] && board[2][2] === player && board[1][1] === "") {
-            board[1][1] = playerAI
+        if(board[0][0] === board[2][2] && board[2][2] === playerToCheck && board[1][1] === "") {
+            board[1][1] = playerToMakeAMove
             param = true
             break
         }
-        if(board[1][1] === board[2][2] && board[2][2] === player && board[0][0] === "") {
-            board[0][0] = playerAI
+        if(board[1][1] === board[2][2] && board[2][2] === playerToCheck && board[0][0] === "") {
+            board[0][0] = playerToMakeAMove
             param = true
             break
         }
     }
-    console.log(gameTurn)
     return param
 }
 
@@ -350,3 +347,60 @@ function oppositeCorners(param){
     }
     return param
 }
+
+function extraMoves(player) {
+    // center
+    if (board[1][1] === ""){ board[1][1] = player }
+    // corners
+    else if (board[0][2] === ""){ board[0][2] = player } 
+    else if (board[2][2] === ""){ board[2][2] = player } 
+    else if (board[2][0] === ""){ board[2][0] = player } 
+    else if (board[0][0] === ""){ board[0][0] = player }
+    // edges
+    else if (board[1][0] === ""){ board[1][0] = player } 
+    else if (board[0][1] === ""){ board[0][1] = player } 
+    else if (board[1][2] === ""){ board[1][2] = player } 
+    else if (board[2][1] === ""){ board[2][1] = player }
+}
+
+// let oppositeC1 = false
+// function oppositeCornersForXAI(param){
+//     if(board[0][0] === "pets" && board[2][2] === "pets"){
+//         board[1][0] = secondAI
+//         param = true
+//     }
+//     if(board[0][2] === "pets" && board[2][0] === "pets"){
+//         board[1][2] = secondAI
+//         param = true
+//     }
+//     return param
+// }
+
+function getUnbeatableAiCoordinatesForXAI() {
+    console.log("getUnbeatableAiCoordinatesForXAI()")
+    let coordX = Math.floor(Math.random() * 3);
+    let coordY = Math.floor(Math.random() * 3);
+    // if(gameTurn === 1 && oppositeCornersForXAI(oppositeC1) === true){
+    //     if(board[1][1] === ""){
+    //         board[1][1] = secondAI
+    //     }
+    // }
+    // if(gameTurn < 4 && gameTurn !== 1 && oppositeCornersForXAI(oppositeC1) === true){
+    //     oppositeCornersForXAI(oppositeC1)
+    // } else 
+    if(easyWinOrEasyLose(secondAI, easyWin, secondAI) === true){
+        easyWinOrEasyLose(secondAI, easyWin, secondAI)
+    } else if (easyWinOrEasyLose(secondAI, easyWin, secondAI) === false && easyWinOrEasyLose(playerAI, easyLose, secondAI) === true){
+        easyWinOrEasyLose(playerAI, easyLose, secondAI);
+    }
+    else {
+        // extraMoves(secondAI)
+        if (board[coordX][coordY] !== "") {
+            displayMessage(`Position is already taken on board`);
+            gameTurn -= 1
+            return
+        } else {
+            board[coordX][coordY] = secondAI;
+        }
+    }
+};
