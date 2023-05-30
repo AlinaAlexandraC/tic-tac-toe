@@ -11,26 +11,21 @@ function setGameMode(selectedValue) {
         case 'human-human':
             isPlayerXHuman = true;
             isPlayerYHuman = true;            
-            setHTMLvisibilityForInputHumanCoordinates(true);
-            setHTMLvisibilityForInputAiCoordinatesInput(false);
+            changeHTMLvisibilityForInputHumanOrAICoordinates(true,false);
             break;
         case 'human-ai':
             isPlayerXHuman = true;
             isPlayerYHuman = false;
-            setHTMLvisibilityForInputHumanCoordinates(true);
-            setHTMLvisibilityForInputAiCoordinatesInput(false);
+            changeHTMLvisibilityForInputHumanOrAICoordinates(true,false);
             break;
         case 'ai-ai':
             isPlayerXHuman = false;
             isPlayerYHuman = false;
-            setHTMLvisibilityForInputHumanCoordinates(false);
-            setHTMLvisibilityForInputAiCoordinatesInput(true);
+            changeHTMLvisibilityForInputHumanOrAICoordinates(false,true);
             break;
     }
     resetBoard();
-
-    setHTMLvisibilityForInputGameMode(false);
-    setHTMLvisibilityForButtonLabeledReset(true);
+    changeVisibilityForInputGameModeOrButtonLabeledReset(false, true);
     displayMessage("Player X's turn");
 }
 
@@ -54,7 +49,6 @@ function processHumanCoordinate(input) {
     inputField.value = '';
 
     //position is already taken on the board
-   
     if(board[coordinates.x][coordinates.y] !== ""){
         displayMessage(`Position is already taken on board`);
         //with this return, gameTurn is not skipped when position is already taken
@@ -65,12 +59,10 @@ function processHumanCoordinate(input) {
         gameTurn += 1;
     
     if (isPlayerYHuman === false) {
-        setHTMLvisibilityForInputHumanCoordinates(false);
-        setHTMLvisibilityForInputAiCoordinatesInput(true);
+        changeHTMLvisibilityForInputHumanOrAICoordinates(false,true);
     }
 
     endOfGameSetUp()
-
     displayBoard(board);
 }
 
@@ -91,45 +83,24 @@ function processAICoordinate() {
 
     //ai vs ai mode
     if (isPlayerXHuman === false && isPlayerYHuman === false) {
-        // let coordX = Math.floor(Math.random() * 3);
-        // let coordY = Math.floor(Math.random() * 3);
-
         if (gameTurn % 2 === 0) {
             secondAI = 'diamond';
             displayMessage("Player O's turn");
-            // if(gameTurn < 3){
-            //     if (board[coordX][coordY] === "") {
-            //         board[coordX][coordY] = secondAI;                
-            //     } else {
-            //         coordX = Math.floor(Math.random() * 3);
-            //         coordY = Math.floor(Math.random() * 3);
-            //         if (board[coordX][coordY] === "") {
-            //             board[coordX][coordY] = secondAI;        
-            //         }
-            //     getUnbeatableAiCoordinatesForXAI()
-            //     }
-            // } else {
-                getUnbeatableAiCoordinatesForXAI()
-            // }            
+            getUnbeatableAiCoordinatesForXAI()     
         } else {
             playerAI = 'pets';
             displayMessage("Player X's turn");
             getUnbeatableAiCoordinates(secondAI)
         }
-        console.log(gameTurn)
-        console.log(board)
-        // displayBoard(board);
     } else {
         getUnbeatableAiCoordinates(currentPlayer);
     }
     
     if (isPlayerXHuman === true) {
-        setHTMLvisibilityForInputHumanCoordinates(true);
-        setHTMLvisibilityForInputAiCoordinatesInput(false);
+        changeHTMLvisibilityForInputHumanOrAICoordinates(true,false);
     }
 
-    endOfGameSetUp()
-    
+    endOfGameSetUp();
     gameTurn +=1;
     displayBoard(board);
 }
@@ -145,10 +116,8 @@ function resetGame() {
     console.log(selectedValue);
     displayMessage("");
     resetBoard();
-    setHTMLvisibilityForInputGameMode(true);
-    setHTMLvisibilityForInputHumanCoordinates(false);
-    setHTMLvisibilityForInputAiCoordinatesInput(false);
-    setHTMLvisibilityForButtonLabeledReset(false);
+    changeHTMLvisibilityForInputHumanOrAICoordinates(false,false);
+    changeVisibilityForInputGameModeOrButtonLabeledReset(true, false);
     document.getElementById('gameMode').selectedIndex = 0
     gameTurn = 0;
 }
@@ -320,21 +289,16 @@ function endOfGameSetUp(){
         } else {
             displayMessage(`Player  ${currentPlayer !== undefined ? currentPlayer : secondAI} has won !`);
         }
-        setHTMLvisibilityForInputGameMode(false);
-        setHTMLvisibilityForButtonLabeledReset(true);
-        setHTMLvisibilityForInputHumanCoordinates(false);
-        setHTMLvisibilityForInputAiCoordinatesInput(false);
+        changeVisibilityForInputGameModeOrButtonLabeledReset(false, true);
+        changeHTMLvisibilityForInputHumanOrAICoordinates(false,false);
     } else if (gameTurn === 9 && winningPlayer === 0) {
         displayMessage("It's a tie");
-        setHTMLvisibilityForButtonLabeledReset(true);
-        setHTMLvisibilityForInputHumanCoordinates(false);
-        setHTMLvisibilityForInputAiCoordinatesInput(false);
-        setHTMLvisibilityForInputGameMode(false);
+        changeVisibilityForInputGameModeOrButtonLabeledReset(false, true);
+        changeHTMLvisibilityForInputHumanOrAICoordinates(false,false);
     }
 }
 
 // opposite corners
-
 let oppositeC = false
 function oppositeCorners(param){
     if(board[0][0] === "diamond" && board[2][2] === "diamond"){
@@ -363,38 +327,17 @@ function extraMoves(player) {
     else if (board[2][1] === ""){ board[2][1] = player }
 }
 
-// let oppositeC1 = false
-// function oppositeCornersForXAI(param){
-//     if(board[0][0] === "pets" && board[2][2] === "pets"){
-//         board[1][0] = secondAI
-//         param = true
-//     }
-//     if(board[0][2] === "pets" && board[2][0] === "pets"){
-//         board[1][2] = secondAI
-//         param = true
-//     }
-//     return param
-// }
-
 function getUnbeatableAiCoordinatesForXAI() {
     console.log("getUnbeatableAiCoordinatesForXAI()")
     let coordX = Math.floor(Math.random() * 3);
     let coordY = Math.floor(Math.random() * 3);
-    // if(gameTurn === 1 && oppositeCornersForXAI(oppositeC1) === true){
-    //     if(board[1][1] === ""){
-    //         board[1][1] = secondAI
-    //     }
-    // }
-    // if(gameTurn < 4 && gameTurn !== 1 && oppositeCornersForXAI(oppositeC1) === true){
-    //     oppositeCornersForXAI(oppositeC1)
-    // } else 
+
     if(easyWinOrEasyLose(secondAI, easyWin, secondAI) === true){
         easyWinOrEasyLose(secondAI, easyWin, secondAI)
     } else if (easyWinOrEasyLose(secondAI, easyWin, secondAI) === false && easyWinOrEasyLose(playerAI, easyLose, secondAI) === true){
         easyWinOrEasyLose(playerAI, easyLose, secondAI);
     }
     else {
-        // extraMoves(secondAI)
         if (board[coordX][coordY] !== "") {
             displayMessage(`Position is already taken on board`);
             gameTurn -= 1
@@ -404,3 +347,12 @@ function getUnbeatableAiCoordinatesForXAI() {
         }
     }
 };
+
+function changeHTMLvisibilityForInputHumanOrAICoordinates(setVisibilityHuman, setVisibilityAI) {
+    setHTMLvisibilityForInputHumanCoordinates(setVisibilityHuman);
+    setHTMLvisibilityForInputAiCoordinatesInput(setVisibilityAI);
+}
+function changeVisibilityForInputGameModeOrButtonLabeledReset(setVisibilityInputGameMode, setVisibilityButonLabeledReset) {
+    setHTMLvisibilityForInputGameMode(setVisibilityInputGameMode);
+    setHTMLvisibilityForButtonLabeledReset(setVisibilityButonLabeledReset);
+}
