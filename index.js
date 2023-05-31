@@ -87,13 +87,16 @@ function processAICoordinate() {
             secondAI = 'diamond';
             displayMessage("Player O's turn");
             getUnbeatableAiCoordinatesForXAI()     
+            gameTurn +=1;
         } else {
             playerAI = 'pets';
             displayMessage("Player X's turn");
             getUnbeatableAiCoordinates(secondAI)
+            gameTurn +=1;
         }
     } else {
         getUnbeatableAiCoordinates(currentPlayer);
+        gameTurn +=1;
     }
     
     if (isPlayerXHuman === true) {
@@ -101,7 +104,6 @@ function processAICoordinate() {
     }
 
     endOfGameSetUp();
-    gameTurn +=1;
     displayBoard(board);
 }
 
